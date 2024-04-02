@@ -2,6 +2,7 @@
 
 SoftwareSerial cellSerial(7, 8);
 String readingMessage;
+String replyNumber;
 
 void setup()
 {
@@ -48,6 +49,10 @@ void loop()
 
       OK*/
 
+      // "+10001114444" length is 14 + 1 for index
+      replyNumber = cmdRead.substring(cmdRead.indexOf(",") + 1, cmdRead.indexOf(",") + 15);
+      Serial.println("Reply number is: " + replyNumber);
+
       // Delete the message
       cellSerial.println("AT+CMGD=" + readingMessage);
       delay(1000);
@@ -74,7 +79,7 @@ void loop()
       {
         Serial.write(cellSerial.read());
       }
-      cellSerial.println("AT+CMGS=\"19705551234\"");
+      cellSerial.println("AT+CMGS=" + replyNumber);
       delay(1000);
       cellSerial.print("Signal strength: " + cmdRead);
       delay(1000);
